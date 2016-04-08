@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="/styles/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+        var name=prompt('Enter your username here:')
+        $(document).ready(function() {
+        //Procedures on user logging in
+            var socket=io.connect();
+            socket.emit("new_user", {name:name})
+            //Append existing users and messages to user screen
+            socket.on("user_login", function(data){
+                console.log(data.messages, data.users);
+
+                for(var prop in data.users){
+                    $('.users').append('<div class="user"><h3>' + data.users[prop] + '</h3></div>');
+                }
+
+                for(var i = 0; i < data.messages.length; i++){
+                    $('.messages').append('<p>'+data.messages[i].sender + data.messages[i].timestamp + data.messages[i].message + '</p>')
+                }
+            });
+        //make user's name appear on all other users' screens
+            socket.on("newuser_login", function(data){
+                $('.users').append('<div class="user"><h3>' + data.newuser + '</h3></div>');
+            });
+        //make message submit event
+            $('form').submit(function(e){
+                e.preventDefault()
+                var now = new Date()
+                socket.emit("new_message", {message:$('form textarea').val(), timestamp:now, userid:socket.id})
+                console.log($('form textarea').val());
+                $('form textarea').val("")
+            })
+            socket.on('broadcast_message', function(data){
+                var now = new Date()
+                $('.messages p:first-child').before('<p>' + data.sender + " " + now + " " + data.message + '</p>')
+            })
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h3>Welcome to the Chatroom!</h3>
+        <div class="users"></div>
+        <div class="messages"><p></p>
+        </div><form><textarea name="message"></textarea><input type="submit" value="Send Message"></form>
+    </div>
+
+</body>
+</html>

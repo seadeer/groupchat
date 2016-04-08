@@ -1,0 +1,40 @@
+.container{
+    padding: 50px 20px;
+    width: 60%;
+    margin-left: 20%;
+    background-color: #FBF394;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.messages{
+    background-color: white;
+    overflow-y: scroll;
+    height: 300px;
+    width: 90%;
+    margin: 0 auto;
+    text-align: left;
+}
+    .messages p{
+        margin-left: 10px;
+    }
+
+.user{
+    display: inline-block;
+    width: 90px;
+    height: 90px;
+    border-radius: 100%;
+    background-color: #4BC5BA;
+    margin: 10px;
+}
+
+textarea{
+    margin: 10px;
+    width: 60%;
+    display: inline-block;
+    vertical-align: top;
+}
+
+input [type=submit]{
+    margin: 10px;
+}
